@@ -1,70 +1,147 @@
-# Getting Started with Create React App
+# Fashion Hub - MERN Stack E-Commerce Website
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Fashion Hub is a full-featured e-commerce platform for a clothing store, built with the MERN stack (MongoDB, Express, React, Node.js).
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- User authentication (register, login, profile management)
+- Product browsing by categories
+- Product search
+- Shopping cart functionality
+- Checkout process
+- Order management
+- Admin dashboard for product, order, and user management
 
-### `npm start`
+## Installation
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+1. Clone the repository
+2. Install dependencies
+   ```
+   npm install
+   ```
+3. Create a `.env` file in the root directory with the following variables:
+   ```
+   MONGO_URI=your_mongodb_connection_string
+   JWT_SECRET=your_jwt_secret
+   PORT=5002
+   ```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Running the Application
 
-### `npm test`
+To run both the server and client concurrently:
+```
+npm run dev
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+To run only the server:
+```
+npm run server
+```
 
-### `npm run build`
+To run only the client:
+```
+npm run client
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Creating an Admin User
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+There are two ways to create an admin user:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Method 1: Using the Seeder Script
 
-### `npm run eject`
+Run the following command to create a default admin user:
+```
+npm run data:import
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+This will create an admin user with the following credentials:
+- Email: admin@example.com
+- Password: admin123
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+To remove the seeded admin user:
+```
+npm run data:destroy
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Method 2: Manual Registration and Database Update
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+1. Register a new user through the application interface
+2. Access your MongoDB database (using MongoDB Compass or similar tool)
+3. Find the user in the `users` collection
+4. Change the `isAdmin` field from `false` to `true`
+5. Save the changes
+6. Log in with the user's credentials to access admin features
 
-## Learn More
+## Admin Features
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Once logged in as an admin, you can access the following features:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+1. **Product Management**
+   - View all products
+   - Add new products
+   - Edit existing products
+   - Delete products
 
-### Code Splitting
+2. **Order Management**
+   - View all orders
+   - Update order status (Processing, Shipped, Delivered, Cancelled)
+   - View order details
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+3. **User Management**
+   - View all users
+   - Make users admin or remove admin privileges
+   - Delete users
 
-### Analyzing the Bundle Size
+## Technologies Used
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- **Frontend**: React, React Router, Axios, Bootstrap
+- **Backend**: Node.js, Express
+- **Database**: MongoDB
+- **Authentication**: JWT (JSON Web Tokens)
+- **State Management**: React Context API
 
-### Making a Progressive Web App
+## API Endpoints
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Auth Routes
+- `POST /api/auth/register` - Register a new user
+- `POST /api/auth/login` - Login user
+- `GET /api/auth/profile` - Get user profile
+- `PUT /api/auth/profile` - Update user profile
 
-### Advanced Configuration
+### Product Routes
+- `GET /api/products` - Get all products
+- `GET /api/products/:id` - Get single product
+- `POST /api/products` - Create a product (Admin only)
+- `PUT /api/products/:id` - Update a product (Admin only)
+- `DELETE /api/products/:id` - Delete a product (Admin only)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+### Cart Routes
+- `GET /api/cart` - Get user cart
+- `POST /api/cart` - Add item to cart
+- `PUT /api/cart/:itemId` - Update cart item
+- `DELETE /api/cart/:itemId` - Remove item from cart
 
-### Deployment
+### Order Routes
+- `POST /api/orders` - Create new order
+- `GET /api/orders/myorders` - Get logged in user orders
+- `GET /api/orders/:id` - Get order by ID
+- `PUT /api/orders/:id/pay` - Update order to paid
+- `PUT /api/orders/:id/deliver` - Update order to delivered (Admin only)
+- `PUT /api/orders/:id/status` - Update order status (Admin only)
+- `GET /api/orders` - Get all orders (Admin only)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### User Routes
+- `GET /api/users` - Get all users (Admin only)
+- `GET /api/users/:id` - Get user by ID (Admin only)
+- `PUT /api/users/:id` - Update user (Admin only)
+- `DELETE /api/users/:id` - Delete user (Admin only)
 
-### `npm run build` fails to minify
+## License
+This project is licensed under the MIT License.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Acknowledgements
+- [React.js](https://reactjs.org/)
+- [Node.js](https://nodejs.org/)
+- [Express.js](https://expressjs.com/)
+- [MongoDB](https://www.mongodb.com/)
+- [Mongoose](https://mongoosejs.com/) 
