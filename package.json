@@ -5,14 +5,14 @@
   "main": "index.js",
   "scripts": {
     "start": "set PORT=3001 && set NODE_OPTIONS=--openssl-legacy-provider && react-scripts --max_old_space_size=4096 start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "server": "nodemon backend/server.js",
+    "build": "set NODE_OPTIONS=--openssl-legacy-provider && react-scripts build",
+    "test": "set NODE_OPTIONS=--openssl-legacy-provider && react-scripts test",
+    "eject": "set NODE_OPTIONS=--openssl-legacy-provider && react-scripts eject",
+    "server": "set NODE_OPTIONS=--openssl-legacy-provider && nodemon backend/server.js",
     "client": "set PORT=3001 && set NODE_OPTIONS=--openssl-legacy-provider && react-scripts --max_old_space_size=4096 start",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "data:import": "node backend/seeder",
-    "data:destroy": "node backend/seeder -d"
+    "dev": "set NODE_OPTIONS=--openssl-legacy-provider && concurrently \"npm run server\" \"npm run client\"",
+    "data:import": "set NODE_OPTIONS=--openssl-legacy-provider && node backend/seeder",
+    "data:destroy": "set NODE_OPTIONS=--openssl-legacy-provider && node backend/seeder -d"
   },
   "proxy": "http://localhost:5002",
   "dependencies": {
