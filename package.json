@@ -4,15 +4,16 @@
   "description": "MERN Stack E-Commerce Website for Clothing Store",
   "main": "index.js",
   "scripts": {
-    "start": "set PORT=3001 && set NODE_OPTIONS=--openssl-legacy-provider && react-scripts --max_old_space_size=4096 start",
-    "build": "set NODE_OPTIONS=--openssl-legacy-provider && react-scripts build",
-    "test": "set NODE_OPTIONS=--openssl-legacy-provider && react-scripts test",
-    "eject": "set NODE_OPTIONS=--openssl-legacy-provider && react-scripts eject",
-    "server": "set NODE_OPTIONS=--openssl-legacy-provider && nodemon backend/server.js",
-    "client": "set PORT=3001 && set NODE_OPTIONS=--openssl-legacy-provider && react-scripts --max_old_space_size=4096 start",
-    "dev": "set NODE_OPTIONS=--openssl-legacy-provider && concurrently \"npm run server\" \"npm run client\"",
-    "data:import": "set NODE_OPTIONS=--openssl-legacy-provider && node backend/seeder",
-    "data:destroy": "set NODE_OPTIONS=--openssl-legacy-provider && node backend/seeder -d"
+    "start": "set PORT=3001 && react-scripts start",
+    "build": "react-scripts build",
+    "build:custom": "node build.js",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "server": "nodemon backend/server.js",
+    "client": "set PORT=3001 && react-scripts start",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "data:import": "node backend/seeder",
+    "data:destroy": "node backend/seeder -d"
   },
   "proxy": "http://localhost:5002",
   "dependencies": {
@@ -31,7 +32,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.2",
-    "react-scripts": "^3.0.1",
+    "react-scripts": "^5.0.1",
     "web-vitals": "^2.1.4"
   },
   "eslintConfig": {
