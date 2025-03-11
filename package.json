@@ -17,7 +17,7 @@
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "data:import": "node backend/seeder",
     "data:destroy": "node backend/seeder -d",
-    "vercel-build": "NODE_OPTIONS=--openssl-legacy-provider react-scripts build"
+    "vercel-build": "CI=false NODE_OPTIONS=--openssl-legacy-provider react-scripts build"
   },
   "proxy": "http://localhost:5002",
   "dependencies": {

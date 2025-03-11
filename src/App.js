@@ -29,7 +29,8 @@ import { CartProvider } from './context/CartContext';
 // CSS
 import './App.css';
 
-// Update API URL to use port 5001 instead of 5000
+// API URL is defined here but used in other files via environment variables
+// eslint-disable-next-line no-unused-vars
 const API_URL = 'http://localhost:5001';
 
 function App() {
