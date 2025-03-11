@@ -4,11 +4,11 @@
   "description": "MERN Stack E-Commerce Website for Clothing Store",
   "main": "index.js",
   "engines": {
-    "node": "16.x"
+    "node": "18.x"
   },
   "scripts": {
     "start": "set PORT=3001 && react-scripts start",
-    "build": "set NODE_OPTIONS=--openssl-legacy-provider && react-scripts build",
+    "build": "NODE_OPTIONS=--openssl-legacy-provider react-scripts build",
     "build:custom": "node build.js",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
@@ -16,7 +16,8 @@
     "client": "set PORT=3001 && react-scripts start",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "data:import": "node backend/seeder",
-    "data:destroy": "node backend/seeder -d"
+    "data:destroy": "node backend/seeder -d",
+    "vercel-build": "NODE_OPTIONS=--openssl-legacy-provider react-scripts build"
   },
   "proxy": "http://localhost:5002",
   "dependencies": {

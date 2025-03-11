@@ -1,14 +1,7 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "build"
-      }
-    }
-  ],
+  "buildCommand": "npm run vercel-build",
+  "outputDirectory": "build",
   "routes": [
     { "handle": "filesystem" },
     { "src": "/static/(.*)", "dest": "/static/$1" },
@@ -18,6 +11,6 @@
   ],
   "env": {
     "NODE_OPTIONS": "--openssl-legacy-provider",
-    "NODE_VERSION": "16.x"
+    "NODE_VERSION": "18.x"
   }
 } 
