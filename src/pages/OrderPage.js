@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
+import api from '../services/api';
 
 const OrderPage = () => {
   const { id } = useParams();
@@ -16,13 +16,7 @@ const OrderPage = () => {
       try {
         setLoading(true);
         
-        const config = {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        };
-
-        const { data } = await axios.get(`http://localhost:5001/api/orders/${id}`, config);
+        const { data } = await api.get(`/api/orders/${id}`);
         setOrder(data);
         setLoading(false);
       } catch (error) {

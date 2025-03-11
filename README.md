@@ -144,4 +144,33 @@ This project is licensed under the MIT License.
 - [Node.js](https://nodejs.org/)
 - [Express.js](https://expressjs.com/)
 - [MongoDB](https://www.mongodb.com/)
-- [Mongoose](https://mongoosejs.com/) 
+- [Mongoose](https://mongoosejs.com/)
+
+## API URL कॉन्फ़िगरेशन
+
+इस प्रोजेक्ट में अलग-अलग वातावरण (environment) के लिए अलग-अलग API URL का उपयोग किया गया है:
+
+### डेवलपमेंट (Development) के लिए
+डेवलपमेंट मोड में, एप्लिकेशन `http://localhost:5001` पर API कॉल करेगा।
+
+### प्रोडक्शन (Production) के लिए
+प्रोडक्शन मोड में, एप्लिकेशन `REACT_APP_API_URL` एनवायरनमेंट वेरिएबल का उपयोग करेगा।
+
+## प्रोडक्शन में डिप्लॉय करने के लिए
+1. `vercel.json` फ़ाइल में `REACT_APP_API_URL` को अपने बैकएंड API के URL से अपडेट करें।
+2. `.env.production` फ़ाइल में `REACT_APP_API_URL` को अपने बैकएंड API के URL से अपडेट करें।
+
+उदाहरण:
+```
+REACT_APP_API_URL=https://your-backend-api-url.vercel.app
+```
+
+## API सर्विस
+सभी API कॉल `src/services/api.js` फ़ाइल के माध्यम से किए जाते हैं। यह फ़ाइल एक axios इंस्टेंस बनाती है जो:
+
+1. सही API URL का उपयोग करती है (डेवलपमेंट या प्रोडक्शन के आधार पर)
+2. हेडर्स में ऑथेंटिकेशन टोकन जोड़ती है
+3. एरर हैंडलिंग प्रदान करती है
+
+## नोट
+अगर आप अपने बैकएंड को अलग से डिप्लॉय कर रहे हैं, तो सुनिश्चित करें कि CORS सही तरीके से कॉन्फ़िगर किया गया है ताकि आपका फ्रंटएंड बैकएंड से कम्युनिकेट कर सके। 

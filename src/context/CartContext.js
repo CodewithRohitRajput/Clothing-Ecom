@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import axios from 'axios';
 import { AuthContext } from './AuthContext';
+import api from '../services/api';
 
 export const CartContext = createContext();
 
@@ -25,15 +25,7 @@ export const CartProvider = ({ children }) => {
   const fetchCart = async () => {
     try {
       setLoading(true);
-      
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
-
-      const { data } = await axios.get('http://localhost:5001/api/cart', config);
-      
+      const { data } = await api.get('/api/cart');
       setCartItems(data.items || []);
       setLoading(false);
     } catch (error) {
@@ -51,22 +43,14 @@ export const CartProvider = ({ children }) => {
       if (user) {
         setLoading(true);
         
-        const config = {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${user.token}`,
-          },
-        };
-
-        const { data } = await axios.post(
-          'http://localhost:5001/api/cart',
+        const { data } = await api.post(
+          '/api/cart',
           {
             productId: product._id,
             quantity,
             size,
             color,
-          },
-          config
+          }
         );
 
         setCartItems(data.items);
@@ -121,20 +105,15 @@ export const CartProvider = ({ children }) => {
       if (user) {
         setLoading(true);
         
-        const config = {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        };
-
-        const { data } = await axios.delete(`http://localhost:5001/api/cart/${id}`, config);
+        const { data } = await api.delete(`/api/cart/${id}`);
 
         setCartItems(data.items);
         setLoading(false);
       } else {
         // If user is not logged in, remove from localStorage
-        setCartItems(cartItems.filter((x) => x._id !== id));
-        localStorage.setItem('cartItems', JSON.stringify(cartItems));
+        const updatedCartItems = cartItems.filter((x) => x._id !== id);
+        setCartItems(updatedCartItems);
+        localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
       }
     } catch (error) {
       setError(
@@ -151,27 +130,20 @@ export const CartProvider = ({ children }) => {
       if (user) {
         setLoading(true);
         
-        const config = {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${user.token}`,
-          },
-        };
-
-        const { data } = await axios.put(
-          `http://localhost:5001/api/cart/${id}`,
-          { quantity },
-          config
+        const { data } = await api.put(
+          `/api/cart/${id}`,
+          { quantity }
         );
 
         setCartItems(data.items);
         setLoading(false);
       } else {
         // If user is not logged in, update in localStorage
-        setCartItems(
-          cartItems.map((x) => (x._id === id ? { ...x, quantity } : x))
+        const updatedCartItems = cartItems.map((x) => 
+          (x._id === id ? { ...x, quantity } : x)
         );
-        localStorage.setItem('cartItems', JSON.stringify(cartItems));
+        setCartItems(updatedCartItems);
+        localStorage.setItem('cartItems', JSON.stringify(updatedCartItems));
       }
     } catch (error) {
       setError(
@@ -188,13 +160,7 @@ export const CartProvider = ({ children }) => {
       if (user) {
         setLoading(true);
         
-        const config = {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        };
-
-        await axios.delete('http://localhost:5001/api/cart', config);
+        await api.delete('/api/cart');
 
         setCartItems([]);
         setLoading(false);

@@ -1,8 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { CartContext } from '../context/CartContext';
 import { AuthContext } from '../context/AuthContext';
+import api from '../services/api';
 
 const PlaceOrderPage = () => {
   const { cartItems, clearCart } = useContext(CartContext);
@@ -47,13 +47,6 @@ const PlaceOrderPage = () => {
   const placeOrderHandler = async () => {
     try {
       setLoading(true);
-      
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
 
       // Map cart items to order items format
       const orderItems = cartItems.map(item => ({
@@ -66,8 +59,8 @@ const PlaceOrderPage = () => {
         color: item.color
       }));
 
-      const { data } = await axios.post(
-        'http://localhost:5001/api/orders',
+      const { data } = await api.post(
+        '/api/orders',
         {
           orderItems,
           shippingAddress,
@@ -76,8 +69,7 @@ const PlaceOrderPage = () => {
           taxPrice,
           shippingPrice,
           totalPrice,
-        },
-        config
+        }
       );
 
       // Clear cart after successful order

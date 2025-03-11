@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
+import api from '../services/api';
 
 const ProductListPage = () => {
   const [products, setProducts] = useState([]);
@@ -24,13 +24,7 @@ const ProductListPage = () => {
     try {
       setLoading(true);
       
-      const config = {
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
-
-      const { data } = await axios.get('/api/products', config);
+      const { data } = await api.get('/api/products');
       setProducts(data.products);
       setLoading(false);
     } catch (error) {
@@ -46,13 +40,7 @@ const ProductListPage = () => {
   const deleteHandler = async (id) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        };
-
-        await axios.delete(`/api/products/${id}`, config);
+        await api.delete(`/api/products/${id}`);
         setDeleteSuccess(true);
         fetchProducts();
       } catch (error) {
@@ -69,17 +57,10 @@ const ProductListPage = () => {
     try {
       setLoading(true);
       
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
-
       console.log('Creating product with token:', user.token);
       console.log('User is admin:', user.isAdmin);
       
-      const { data } = await axios.post('/api/products', {}, config);
+      const { data } = await api.post('/api/products', {});
       console.log('Product created successfully:', data);
       navigate(`/admin/product/${data._id}/edit`);
     } catch (error) {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
+import api from '../services/api';
 
 const ProductEditPage = () => {
   const { id } = useParams();
@@ -32,13 +32,7 @@ const ProductEditPage = () => {
       try {
         setLoading(true);
         
-        const config = {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        };
-
-        const { data } = await axios.get(`/api/products/${id}`, config);
+        const { data } = await api.get(`/api/products/${id}`);
         
         setName(data.name);
         setPrice(data.price);
@@ -74,16 +68,9 @@ const ProductEditPage = () => {
     try {
       setLoading(true);
       
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
-
       const updatedImages = image ? [image, ...images.filter(img => img !== image)] : images;
 
-      await axios.put(
+      await api.put(
         `/api/products/${id}`,
         {
           name,
@@ -95,8 +82,7 @@ const ProductEditPage = () => {
           sizes,
           colors,
           isFeatured,
-        },
-        config
+        }
       );
       
       setSuccess(true);
@@ -256,7 +242,7 @@ const ProductEditPage = () => {
             </div>
             
             <button type="submit" className="btn btn-primary" disabled={loading}>
-              {loading ? 'Updating...' : 'Update'}
+              {loading ? 'Updating...' : 'Update Product'}
             </button>
           </form>
         </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import config from './config';
 
 // Components
 import Header from './components/Header';
@@ -29,9 +30,9 @@ import { CartProvider } from './context/CartContext';
 // CSS
 import './App.css';
 
-// API URL is defined here but used in other files via environment variables
+// API URL from config
 // eslint-disable-next-line no-unused-vars
-const API_URL = 'http://localhost:5001';
+const API_URL = config.API_URL;
 
 function App() {
   return (
