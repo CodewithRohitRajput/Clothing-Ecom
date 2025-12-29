@@ -4,7 +4,7 @@
   "description": "MERN Stack E-Commerce Website for Clothing Store",
   "main": "index.js",
   "engines": {
-    "node": "18.x"
+    "node": ">=18.x"
   },
   "scripts": {
     "start": "set PORT=3001 && react-scripts start",

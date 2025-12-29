@@ -1,5 +1,32 @@
 const Product = require('../models/Product');
 
+// Helper function to normalize category values
+const normalizeCategory = (category) => {
+  if (!category) return null;
+  const normalized = category.toLowerCase().trim();
+  
+  // Map common variations to enum values
+  const categoryMap = {
+    'men': 'mens',
+    'man': 'mens',
+    'male': 'mens',
+    'woman': 'womens',
+    'women': 'womens',
+    'female': 'womens',
+    'kid': 'kids',
+    'children': 'kids',
+    'child': 'kids',
+    'trending': 'trending',
+    'accessories': 'trending', // Map accessories to trending for now
+    'accessory': 'trending',
+    'mens': 'mens',
+    'womens': 'womens',
+    'kids': 'kids'
+  };
+  
+  return categoryMap[normalized] || 'mens'; // Default to mens if not found
+};
+
 // @desc    Fetch all products
 // @route   GET /api/products
 // @access  Public
@@ -72,11 +99,13 @@ exports.createProduct = async (req, res) => {
       isFeatured,
     } = req.body;
 
+    const normalizedCategory = normalizeCategory(category) || 'mens';
+    
     const product = new Product({
       name: name || 'Sample Product',
       description: description || 'Sample Description',
       images: images || [],
-      category: category ? category.toLowerCase() : 'mens',
+      category: normalizedCategory,
       sizes: sizes || [],
       colors: colors || [],
       price: price || 0,
@@ -87,8 +116,21 @@ exports.createProduct = async (req, res) => {
     const createdProduct = await product.save();
     res.status(201).json(createdProduct);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server Error' });
+    console.error('Error creating product:', error);
+    
+    // Provide more detailed error messages
+    if (error.name === 'ValidationError') {
+      const errors = Object.values(error.errors).map(err => err.message);
+      return res.status(400).json({ 
+        message: 'Validation Error', 
+        errors: errors 
+      });
+    }
+    
+    res.status(500).json({ 
+      message: error.message || 'Server Error',
+      error: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
   }
 };
 
@@ -112,15 +154,15 @@ exports.updateProduct = async (req, res) => {
     const product = await Product.findById(req.params.id);
 
     if (product) {
-      product.name = name || product.name;
-      product.description = description || product.description;
-      product.images = images || product.images;
-      product.category = category ? category.toLowerCase() : product.category;
-      product.sizes = sizes || product.sizes;
-      product.colors = colors || product.colors;
-      product.price = price || product.price;
-      product.countInStock = countInStock || product.countInStock;
-      product.isFeatured = isFeatured !== undefined ? isFeatured : product.isFeatured;
+      if (name !== undefined) product.name = name;
+      if (description !== undefined) product.description = description;
+      if (images !== undefined) product.images = images;
+      if (category !== undefined) product.category = normalizeCategory(category) || product.category;
+      if (sizes !== undefined) product.sizes = sizes;
+      if (colors !== undefined) product.colors = colors;
+      if (price !== undefined) product.price = price;
+      if (countInStock !== undefined) product.countInStock = countInStock;
+      if (isFeatured !== undefined) product.isFeatured = isFeatured;
 
       const updatedProduct = await product.save();
       res.json(updatedProduct);
@@ -128,8 +170,21 @@ exports.updateProduct = async (req, res) => {
       res.status(404).json({ message: 'Product not found' });
     }
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Server Error' });
+    console.error('Error updating product:', error);
+    
+    // Provide more detailed error messages
+    if (error.name === 'ValidationError') {
+      const errors = Object.values(error.errors).map(err => err.message);
+      return res.status(400).json({ 
+        message: 'Validation Error', 
+        errors: errors 
+      });
+    }
+    
+    res.status(500).json({ 
+      message: error.message || 'Server Error',
+      error: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
   }
 };
 
@@ -141,7 +196,7 @@ exports.deleteProduct = async (req, res) => {
     const product = await Product.findById(req.params.id);
 
     if (product) {
-      await product.remove();
+      await Product.findByIdAndDelete(req.params.id);
       res.json({ message: 'Product removed' });
     } else {
       res.status(404).json({ message: 'Product not found' });

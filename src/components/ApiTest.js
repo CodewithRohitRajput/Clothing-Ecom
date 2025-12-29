@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../services/api';
 
 const ApiTest = () => {
   const [message, setMessage] = useState('');
@@ -10,7 +10,7 @@ const ApiTest = () => {
     const testApi = async () => {
       try {
         setLoading(true);
-        const { data } = await axios.get('http://localhost:5001/api/test');
+        const { data } = await api.get('/api/test');
         setMessage(data.message);
         setLoading(false);
       } catch (error) {

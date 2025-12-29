@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../services/api';
 import { AuthContext } from '../context/AuthContext';
 
 const UserListPage = () => {
@@ -23,13 +23,7 @@ const UserListPage = () => {
       try {
         setLoading(true);
         
-        const config = {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        };
-
-        const { data } = await axios.get('http://localhost:5001/api/users', config);
+        const { data } = await api.get('/api/users');
         setUsers(data);
         setLoading(false);
       } catch (error) {
@@ -48,13 +42,7 @@ const UserListPage = () => {
   const deleteHandler = async (id) => {
     if (window.confirm('Are you sure you want to delete this user?')) {
       try {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        };
-
-        await axios.delete(`http://localhost:5001/api/users/${id}`, config);
+        await api.delete(`/api/users/${id}`);
         
         // Update users list
         setUsers(users.filter((user) => user._id !== id));
@@ -76,17 +64,9 @@ const UserListPage = () => {
 
   const toggleAdminHandler = async (id, currentAdminStatus) => {
     try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
-
-      const { data } = await axios.put(
-        `http://localhost:5001/api/users/${id}`,
-        { isAdmin: !currentAdminStatus },
-        config
+      const { data } = await api.put(
+        `/api/users/${id}`,
+        { isAdmin: !currentAdminStatus }
       );
 
       // Update users list

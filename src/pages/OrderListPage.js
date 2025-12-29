@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../services/api';
 import { AuthContext } from '../context/AuthContext';
 
 const OrderListPage = () => {
@@ -22,13 +22,7 @@ const OrderListPage = () => {
       try {
         setLoading(true);
         
-        const config = {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        };
-
-        const { data } = await axios.get('http://localhost:5001/api/orders', config);
+        const { data } = await api.get('/api/orders');
         
         // Check if data is an array or has orders property
         if (Array.isArray(data)) {
@@ -57,17 +51,9 @@ const OrderListPage = () => {
 
   const updateOrderStatusHandler = async (id, status) => {
     try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
-
-      await axios.put(
-        `http://localhost:5001/api/orders/${id}/status`,
-        { status },
-        config
+      await api.put(
+        `/api/orders/${id}/status`,
+        { status }
       );
 
       // Update orders list

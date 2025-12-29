@@ -17,6 +17,9 @@ router.post('/', protect, createOrder);
 // @route   GET /api/orders/myorders
 router.get('/myorders', protect, getMyOrders);
 
+// @route   GET /api/orders (must come before /:id to avoid route conflicts)
+router.get('/', protect, admin, getOrders);
+
 // @route   GET /api/orders/:id
 router.get('/:id', protect, getOrderById);
 
@@ -28,8 +31,5 @@ router.put('/:id/deliver', protect, admin, updateOrderToDelivered);
 
 // @route   PUT /api/orders/:id/status
 router.put('/:id/status', protect, admin, updateOrderStatus);
-
-// @route   GET /api/orders
-router.get('/', protect, admin, getOrders);
 
 module.exports = router; 

@@ -1,6 +1,6 @@
 // Configuration for different environments
 const dev = {
-  API_URL: 'http://localhost:5001'
+  API_URL: 'http://localhost:5002'
 };
 
 const prod = {

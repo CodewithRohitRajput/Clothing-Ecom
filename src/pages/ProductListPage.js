@@ -63,6 +63,7 @@ const ProductListPage = () => {
       const { data } = await api.post('/api/products', {});
       console.log('Product created successfully:', data);
       navigate(`/admin/product/${data._id}/edit`);
+      setLoading(false);
     } catch (error) {
       console.error('Error creating product:', error);
       setError(

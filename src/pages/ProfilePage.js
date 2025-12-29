@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../services/api';
 import { AuthContext } from '../context/AuthContext';
 
 const ProfilePage = () => {
@@ -37,10 +37,8 @@ const ProfilePage = () => {
           };
 
           console.log('Fetching orders for user:', user._id);
-          console.log('API URL:', 'http://localhost:5001/api/orders/myorders');
-          console.log('Headers:', config);
 
-          const { data } = await axios.get('http://localhost:5001/api/orders/myorders', config);
+          const { data } = await api.get('/api/orders/myorders');
           
           console.log('Orders API response:', data);
           
@@ -81,17 +79,9 @@ const ProfilePage = () => {
     setMessage('');
     
     try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${user.token}`,
-        },
-      };
-
-      const { data } = await axios.put(
-        'http://localhost:5001/api/auth/profile',
-        { name, email, password: password ? password : undefined },
-        config
+      const { data } = await api.put(
+        '/api/auth/profile',
+        { name, email, password: password ? password : undefined }
       );
 
       // Update user in context

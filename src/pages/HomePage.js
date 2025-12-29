@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../services/api';
 import ProductCard from '../components/ProductCard';
 import ApiTest from '../components/ApiTest';
 
@@ -14,12 +14,10 @@ const HomePage = () => {
       try {
         setLoading(true);
         
-        // Updated to use port 5001 explicitly
-        const { data: featuredData } = await axios.get('http://localhost:5001/api/products/featured');
+        const { data: featuredData } = await api.get('/api/products/featured');
         setFeaturedProducts(featuredData);
         
-        // Updated to use port 5001 explicitly
-        const { data: trendingData } = await axios.get('http://localhost:5001/api/products?category=trending');
+        const { data: trendingData } = await api.get('/api/products?category=trending');
         setTrendingProducts(trendingData.products);
         
         setLoading(false);
